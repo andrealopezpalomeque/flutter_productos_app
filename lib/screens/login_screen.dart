@@ -88,7 +88,9 @@ class _LoginForm extends StatelessWidget {
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {
-                  loginForm.isValidForm();
+                  if (!loginForm.isValidForm()) return;
+
+                  Navigator.pushReplacementNamed(context, 'home');
                 },
                 child: const Text('Ingresar'),
                 style: ElevatedButton.styleFrom(
