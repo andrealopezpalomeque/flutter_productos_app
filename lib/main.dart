@@ -1,7 +1,37 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_productos_app/screens/screens.dart';
+import 'package:flutter_productos_app/services/services.dart';
+import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+
+void main() {
+  runApp(
+    MultiProvider(
+      providers: [
+        Provider<ProductsService>(
+          create: (_) => ProductsService(),
+        )
+      ],
+      child: const MyApp(),
+    ),
+  );
+}
+
+class AppState extends ChangeNotifier {
+  
+  Widget build(BuildContext context) {
+ return MultiProvider(
+      providers: [
+        Provider<ProductsService>(
+          create: (_) => ProductsService(),
+        )
+      ],
+      child: const MyApp(),
+    );
+  }
+}
+
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
