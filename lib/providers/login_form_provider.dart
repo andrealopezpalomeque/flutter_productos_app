@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 class LoginFormProvider extends ChangeNotifier {
   //key del formulario
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
-  //campos del formulario
+  //-------CAMPOS FORMULARIO-------
   String email = '';
   String password = '';
-
+//-------CARGANDO-------
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   set isLoading(bool value) {
