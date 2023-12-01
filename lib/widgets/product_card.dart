@@ -14,7 +14,13 @@ class ProductCard extends StatelessWidget {
         decoration: _cardBorders(),
         child: const Stack(
           alignment: Alignment.bottomLeft,
-          children: [_BackgroundImage(), _ProductDetails()],
+          children: [
+            _BackgroundImage(), 
+            _ProductDetails(),
+            Positioned( top: 0, right: 0,child: _PriceTag()),
+            Positioned( top: 0, left: 0,child: _NotAvailable()),
+
+            ],
         ),
       ),
     );
@@ -31,6 +37,61 @@ class ProductCard extends StatelessWidget {
           offset: Offset(0, 5), // move the shadow (x,y)
         ),
       ],
+    );
+  }
+}
+
+class _NotAvailable extends StatelessWidget {
+  const _NotAvailable({
+    Key? key,
+  }) : super(key: key);
+
+
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
+      width: 100,
+      height: 70,
+      decoration: BoxDecoration(
+        color: Colors.yellow[800],
+        borderRadius: const BorderRadius.only(topLeft: Radius.circular(25), bottomRight: Radius.circular(25))
+      ),
+      child: const FittedBox(
+        fit: BoxFit.contain,
+        child: Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            'No disponible',
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _PriceTag extends StatelessWidget {
+  const _PriceTag({
+    Key? key,
+  }) : super(key: key);
+  
+
+  @override
+  Widget build(BuildContext context) {
+    return  Container(
+      width: 100,
+      height: 70,
+      alignment: Alignment.center,
+      decoration: const BoxDecoration(
+        color: Colors.indigo,
+        borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomLeft: Radius.circular(25))
+      ),   
+      child: const FittedBox(
+        fit: BoxFit.contain, //adaptar el texto al contenedor
+        child:  Padding(
+          padding:  EdgeInsets.symmetric(horizontal: 10),  
+          child:  Text('\$100.00', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold))),
+      ),
     );
   }
 }
