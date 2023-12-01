@@ -19,7 +19,6 @@ class ProductCard extends StatelessWidget {
             _ProductDetails(),
             Positioned( top: 0, right: 0,child: _PriceTag()),
             Positioned( top: 0, left: 0,child: _NotAvailable()),
-
             ],
         ),
       ),

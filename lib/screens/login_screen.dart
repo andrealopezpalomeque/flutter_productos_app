@@ -20,7 +20,9 @@ class LoginScreen extends StatelessWidget {
           Text('Login', style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 30),
           ChangeNotifierProvider(
+            // * PROVIDER DEL FORMULARIO DE LOGIN ------------------------------------------------
             create: (_) => LoginFormProvider(),
+            // * FORMULARIO DE LOGIN ------------------------------------------------
             child: const _LoginForm(),
           )
         ])),
@@ -46,6 +48,7 @@ class _LoginForm extends StatelessWidget {
 
         child: Column(
           children: [
+            // * EMAIL ------------------------------------------------
             TextFormField(
                 autocorrect: false,
                 keyboardType: TextInputType.emailAddress,
@@ -67,6 +70,7 @@ class _LoginForm extends StatelessWidget {
                       : 'El correo no es válido';
                 }),
             const SizedBox(height: 30),
+            // * PASSWORD ------------------------------------------------
             TextFormField(
                 autocorrect: false,
                 obscureText: true,
@@ -86,6 +90,7 @@ class _LoginForm extends StatelessWidget {
             const SizedBox(height: 30),
             SizedBox(
               width: double.infinity,
+              // * BOTON DE INGRESO ------------------------------------------------
               child: ElevatedButton(
                 onPressed: loginForm.isLoading
                     ? null
@@ -103,11 +108,11 @@ class _LoginForm extends StatelessWidget {
 
                         Navigator.pushReplacementNamed(context, 'home');
                       },
-                child: Text(loginForm.isLoading ? 'Espere' : 'Ingresar'),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
                     primary: Colors.deepPurple),
+                 child: Text(loginForm.isLoading ? 'Espere' : 'Ingresar'),
               ),
             )
           ],
