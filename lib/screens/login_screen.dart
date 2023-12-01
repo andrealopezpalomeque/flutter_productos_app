@@ -87,12 +87,23 @@ class _LoginForm extends StatelessWidget {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {
-                  if (!loginForm.isValidForm()) return;
+                onPressed: loginForm.isLoading
+                    ? null
+                    : () async {
+                        //Quitar el foco del teclado
+                        FocusScope.of(context).unfocus();
 
-                  Navigator.pushReplacementNamed(context, 'home');
-                },
-                child: const Text('Ingresar'),
+                        if (!loginForm.isValidForm()) return;
+
+                        loginForm.isLoading = true;
+
+                        await Future.delayed(const Duration(seconds: 2));
+
+                        loginForm.isLoading = false;
+
+                        Navigator.pushReplacementNamed(context, 'home');
+                      },
+                child: Text(loginForm.isLoading ? 'Espere' : 'Ingresar'),
                 style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10)),
