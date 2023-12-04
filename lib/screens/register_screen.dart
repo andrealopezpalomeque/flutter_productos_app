@@ -102,9 +102,9 @@ class _LoginForm extends StatelessWidget {
               onPressed: loginForm.isLoading
                   ? null
                   : () async {
-                      //Quitar el foco del teclado
+                      // *Quitar el foco del teclado ------------------------------------------------
                       FocusScope.of(context).unfocus();
-                      //authService es una instancia de la clase AuthService
+                      //! authService es una instancia de la clase AuthService --------------
                       final authService =
                           Provider.of<AuthService>(context, listen: false);
 
@@ -112,17 +112,17 @@ class _LoginForm extends StatelessWidget {
 
                       loginForm.isLoading = true;
 
-                      //VALIDAR SI EL LOGIN ES CORRECTO
+                      //! VALIDAR SI EL LOGIN ES CORRECTO
                       final String? errorMessage = await authService.createUser(
                           loginForm.email, loginForm.password);
 
                       if (errorMessage == null) {
                         Navigator.pushReplacementNamed(context, 'home');
                       } else {
-                        //Mostrar error
+                        //! Mostrar error
                         print(errorMessage);
+                        loginForm.isLoading = false;
                       }
-                      loginForm.isLoading = false;
                     },
               style: ElevatedButton.styleFrom(
                   shape: RoundedRectangleBorder(
