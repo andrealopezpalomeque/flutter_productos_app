@@ -25,7 +25,12 @@ class HomeScreen extends StatelessWidget {
 
               // * REDIRECCIONAR A LA PANTALLA DE PRODUCTO APRETANDO EL CARD ------------------------------------------------
               GestureDetector(
-                  onTap: () => Navigator.pushNamed(context, 'product'),
+                  onTap: () {
+                    productsService.selectedProduct = productsService
+                        .products[index]
+                        .copy(); // ! copy para que no se modifique el original
+                    Navigator.pushNamed(context, 'product');
+                  },
                   child: ProductCard(
                     product: productsService
                         .products[index], //! envio el producto como parametro
