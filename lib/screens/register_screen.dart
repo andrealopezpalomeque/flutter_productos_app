@@ -3,8 +3,8 @@ import 'package:flutter_productos_app/providers/login_form_provider.dart';
 import 'package:flutter_productos_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+class RegisterScreen extends StatelessWidget {
+  const RegisterScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +17,8 @@ class LoginScreen extends StatelessWidget {
         CardContainer(
             child: Column(children: [
           const SizedBox(height: 10),
-          Text('Login', style: Theme.of(context).textTheme.headlineSmall),
+          Text('Crear cuenta',
+              style: Theme.of(context).textTheme.headlineSmall),
           const SizedBox(height: 30),
           ChangeNotifierProvider(
             // * PROVIDER DEL FORMULARIO DE LOGIN ------------------------------------------------
@@ -28,13 +29,12 @@ class LoginScreen extends StatelessWidget {
         ])),
         const SizedBox(height: 50),
         TextButton(
-            onPressed: () =>
-                Navigator.pushReplacementNamed(context, 'register'),
+            onPressed: () => Navigator.pushReplacementNamed(context, 'login'),
             style: ButtonStyle(
               overlayColor:
                   MaterialStateProperty.all(Colors.indigo.withOpacity(0.1)),
             ),
-            child: const Text('Crear una nueva cuenta',
+            child: const Text('¿Ya tienes una cuenta?',
                 style: TextStyle(fontSize: 18, color: Colors.black87))),
       ],
     ))));
