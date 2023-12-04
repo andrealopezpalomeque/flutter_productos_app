@@ -14,17 +14,22 @@ class ProductCard extends StatelessWidget {
         decoration: _cardBorders(),
         child: const Stack(
           alignment: Alignment.bottomLeft,
+          // * ELEMENTOS DE LA CARTA ------------------------------------------------
           children: [
+            // * imagen
             _BackgroundImage(), 
+            // * detalles
             _ProductDetails(),
+            // * precio
             Positioned( top: 0, right: 0,child: _PriceTag()),
+            // * no disponible (si no hay producto)
             Positioned( top: 0, left: 0,child: _NotAvailable()),
             ],
         ),
       ),
     );
   }
-
+// * BORDES DE LA CARTA ------------------------------------------------
   BoxDecoration _cardBorders() {
     return BoxDecoration(
       color: Colors.white,
@@ -39,7 +44,7 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
-
+// * etiqueta de no disponible ------------------------------------------------
 class _NotAvailable extends StatelessWidget {
   const _NotAvailable({
     Key? key,
@@ -68,7 +73,7 @@ class _NotAvailable extends StatelessWidget {
     );
   }
 }
-
+// * etiqueta de precio ------------------------------------------------
 class _PriceTag extends StatelessWidget {
   const _PriceTag({
     Key? key,
@@ -86,7 +91,7 @@ class _PriceTag extends StatelessWidget {
         borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomLeft: Radius.circular(25))
       ),   
       child: const FittedBox(
-        fit: BoxFit.contain, //adaptar el texto al contenedor
+        fit: BoxFit.contain, // *adaptar el texto al contenedor ------
         child:  Padding(
           padding:  EdgeInsets.symmetric(horizontal: 10),  
           child:  Text('\$100.00', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold))),
@@ -94,7 +99,7 @@ class _PriceTag extends StatelessWidget {
     );
   }
 }
-
+// * detalles del producto ------------------------------------------------
 class _ProductDetails extends StatelessWidget {
   const _ProductDetails({
     Key? key,
@@ -131,7 +136,7 @@ class _ProductDetails extends StatelessWidget {
           )),
     );
   }
-
+// * decoracion detalles del producto`------------------------------------------------
   BoxDecoration _buildBoxDecoration() => const BoxDecoration(
       color: Colors.indigo,
       borderRadius:  BorderRadius.only(
@@ -139,7 +144,7 @@ class _ProductDetails extends StatelessWidget {
 
   );
 }
-
+// * imagen del producto ------------------------------------------------
 class _BackgroundImage extends StatelessWidget {
   const _BackgroundImage({
     Key? key,

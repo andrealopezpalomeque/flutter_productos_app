@@ -21,6 +21,9 @@ class ProductsService extends ChangeNotifier {
     final resp = await http.get(url);
 
     final Map<String, dynamic> productsMap = json.decode(resp.body);
+
+    print(productsMap);
+
    
   }
 }

@@ -6,12 +6,8 @@ import 'package:provider/provider.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        Provider<ProductsService>(
-          create: (_) => ProductsService(),
-        )
-      ],
+    ChangeNotifierProvider<ProductsService>(
+      create: (_) => ProductsService(),
       child: const MyApp(),
     ),
   );
