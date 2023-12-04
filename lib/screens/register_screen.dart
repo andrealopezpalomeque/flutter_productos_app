@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_productos_app/providers/login_form_provider.dart';
+import 'package:flutter_productos_app/services/services.dart';
 import 'package:flutter_productos_app/widgets/widgets.dart';
 import 'package:provider/provider.dart';
 
@@ -47,83 +48,90 @@ class _LoginForm extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final loginForm = Provider.of<LoginFormProvider>(context);
-    return Container(
-      child: Form(
-        //Mantener la referencia al KEY
-        key: loginForm.formKey,
-        autovalidateMode: AutovalidateMode.onUserInteraction,
+    return Form(
+      //Mantener la referencia al KEY
+      key: loginForm.formKey,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
 
-        child: Column(
-          children: [
-            // * EMAIL ------------------------------------------------
-            TextFormField(
-                autocorrect: false,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.black54),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    prefixIcon: Icon(Icons.email_outlined)),
-                onChanged: (value) => loginForm.email = value,
-                validator: (value) {
-                  String pattern =
-                      r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+      child: Column(
+        children: [
+          // * EMAIL ------------------------------------------------
+          TextFormField(
+              autocorrect: false,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                  labelText: 'Email',
+                  labelStyle: TextStyle(color: Colors.black54),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  prefixIcon: Icon(Icons.email_outlined)),
+              onChanged: (value) => loginForm.email = value,
+              validator: (value) {
+                String pattern =
+                    r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
 
-                  RegExp regExp = RegExp(pattern);
+                RegExp regExp = RegExp(pattern);
 
-                  return regExp.hasMatch(value ?? '')
-                      ? null
-                      : 'El correo no es válido';
-                }),
-            const SizedBox(height: 30),
-            // * PASSWORD ------------------------------------------------
-            TextFormField(
-                autocorrect: false,
-                obscureText: true,
-                keyboardType: TextInputType.emailAddress,
-                decoration: const InputDecoration(
-                    labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.black54),
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(10))),
-                    prefixIcon: Icon(Icons.lock_outline)),
-                onChanged: (value) => loginForm.password = value,
-                validator: (value) {
-                  return value != null && value.length >= 6
-                      ? null
-                      : 'La contraseña debe tener al menos 6 caracteres';
-                }),
-            const SizedBox(height: 30),
-            SizedBox(
-              width: double.infinity,
-              // * BOTON DE INGRESO ------------------------------------------------
-              child: ElevatedButton(
-                onPressed: loginForm.isLoading
+                return regExp.hasMatch(value ?? '')
                     ? null
-                    : () async {
-                        //Quitar el foco del teclado
-                        FocusScope.of(context).unfocus();
+                    : 'El correo no es válido';
+              }),
+          const SizedBox(height: 30),
+          // * PASSWORD ------------------------------------------------
+          TextFormField(
+              autocorrect: false,
+              obscureText: true,
+              keyboardType: TextInputType.emailAddress,
+              decoration: const InputDecoration(
+                  labelText: 'Password',
+                  labelStyle: TextStyle(color: Colors.black54),
+                  border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(10))),
+                  prefixIcon: Icon(Icons.lock_outline)),
+              onChanged: (value) => loginForm.password = value,
+              validator: (value) {
+                return value != null && value.length >= 6
+                    ? null
+                    : 'La contraseña debe tener al menos 6 caracteres';
+              }),
+          const SizedBox(height: 30),
+          SizedBox(
+            width: double.infinity,
+            // * BOTON DE INGRESO ------------------------------------------------
+            child: ElevatedButton(
+              onPressed: loginForm.isLoading
+                  ? null
+                  : () async {
+                      //Quitar el foco del teclado
+                      FocusScope.of(context).unfocus();
+                      //authService es una instancia de la clase AuthService
+                      final authService =
+                          Provider.of<AuthService>(context, listen: false);
 
-                        if (!loginForm.isValidForm()) return;
+                      if (!loginForm.isValidForm()) return;
 
-                        loginForm.isLoading = true;
+                      loginForm.isLoading = true;
 
-                        await Future.delayed(const Duration(seconds: 2));
+                      //VALIDAR SI EL LOGIN ES CORRECTO
+                      final String? errorMessage = await authService.createUser(
+                          loginForm.email, loginForm.password);
 
-                        loginForm.isLoading = false;
-
+                      if (errorMessage == null) {
                         Navigator.pushReplacementNamed(context, 'home');
-                      },
-                style: ElevatedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10)),
-                    primary: Colors.deepPurple),
-                child: Text(loginForm.isLoading ? 'Espere' : 'Ingresar'),
-              ),
-            )
-          ],
-        ),
+                      } else {
+                        //Mostrar error
+                        print(errorMessage);
+                      }
+                      loginForm.isLoading = false;
+                    },
+              style: ElevatedButton.styleFrom(
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10)),
+                  primary: Colors.deepPurple),
+              child: Text(loginForm.isLoading ? 'Espere' : 'Ingresar'),
+            ),
+          )
+        ],
       ),
     );
   }
