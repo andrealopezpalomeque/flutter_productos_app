@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_productos_app/models/models.dart';
 
 class ProductCard extends StatelessWidget {
-  const ProductCard({super.key});
+  final Product product; // ! se debe pasar el producto como parametro
+
+  const ProductCard({Key? key, required this.product}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,23 +15,35 @@ class ProductCard extends StatelessWidget {
         width: double.infinity,
         height: 420,
         decoration: _cardBorders(),
-        child: const Stack(
+        child: Stack(
           alignment: Alignment.bottomLeft,
           // * ELEMENTOS DE LA CARTA ------------------------------------------------
           children: [
             // * imagen
-            _BackgroundImage(), 
+            _BackgroundImage(
+              product.picture,
+            ),
             // * detalles
-            _ProductDetails(),
+            _ProductDetails(
+              title: product.name,
+              subTitle: product.id!,
+            ),
             // * precio
-            Positioned( top: 0, right: 0,child: _PriceTag()),
+            Positioned(
+                top: 0,
+                right: 0,
+                child: _PriceTag(
+                  product.price,
+                )),
             // * no disponible (si no hay producto)
-            Positioned( top: 0, left: 0,child: _NotAvailable()),
-            ],
+            if (!product.available)
+              const Positioned(top: 0, left: 0, child: _NotAvailable()),
+          ],
         ),
       ),
     );
   }
+
 // * BORDES DE LA CARTA ------------------------------------------------
   BoxDecoration _cardBorders() {
     return BoxDecoration(
@@ -44,26 +59,26 @@ class ProductCard extends StatelessWidget {
     );
   }
 }
+
 // * etiqueta de no disponible ------------------------------------------------
 class _NotAvailable extends StatelessWidget {
   const _NotAvailable({
     Key? key,
   }) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       width: 100,
       height: 70,
       decoration: BoxDecoration(
-        color: Colors.yellow[800],
-        borderRadius: const BorderRadius.only(topLeft: Radius.circular(25), bottomRight: Radius.circular(25))
-      ),
+          color: Colors.yellow[800],
+          borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(25), bottomRight: Radius.circular(25))),
       child: const FittedBox(
         fit: BoxFit.contain,
         child: Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 10),
+          padding: EdgeInsets.symmetric(horizontal: 10),
           child: Text(
             'No disponible',
             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -73,37 +88,44 @@ class _NotAvailable extends StatelessWidget {
     );
   }
 }
+
 // * etiqueta de precio ------------------------------------------------
 class _PriceTag extends StatelessWidget {
-  const _PriceTag({
-    Key? key,
-  }) : super(key: key);
-  
+  final double price;
+
+  const _PriceTag(this.price);
 
   @override
   Widget build(BuildContext context) {
-    return  Container(
+    return Container(
       width: 100,
       height: 70,
       alignment: Alignment.center,
       decoration: const BoxDecoration(
-        color: Colors.indigo,
-        borderRadius: BorderRadius.only(topRight: Radius.circular(25), bottomLeft: Radius.circular(25))
-      ),   
-      child: const FittedBox(
+          color: Colors.indigo,
+          borderRadius: BorderRadius.only(
+              topRight: Radius.circular(25), bottomLeft: Radius.circular(25))),
+      child: FittedBox(
         fit: BoxFit.contain, // *adaptar el texto al contenedor ------
-        child:  Padding(
-          padding:  EdgeInsets.symmetric(horizontal: 10),  
-          child:  Text('\$100.00', style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold))),
+        child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 10),
+            child: Text('\$$price',
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold))),
       ),
     );
   }
 }
+
 // * detalles del producto ------------------------------------------------
 class _ProductDetails extends StatelessWidget {
-  const _ProductDetails({
-    Key? key,
-  }) : super(key: key);
+  final String title;
+  final String subTitle;
+
+  const _ProductDetails({Key? key, required this.title, required this.subTitle})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -114,41 +136,41 @@ class _ProductDetails extends StatelessWidget {
           width: double.infinity,
           height: 70,
           decoration: _buildBoxDecoration(),
-          child: const Column(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Disco Duro',
-                style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.bold),
+                title,
+                style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                
-                ),
-                Text(
-                'Id del disco duro',
-                style: TextStyle(fontSize: 15, color: Colors.white),
+              ),
+              Text(
+                subTitle,
+                style: const TextStyle(fontSize: 15, color: Colors.white),
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
-                
-                ),
-    
+              ),
             ],
           )),
     );
   }
+
 // * decoracion detalles del producto`------------------------------------------------
   BoxDecoration _buildBoxDecoration() => const BoxDecoration(
       color: Colors.indigo,
-      borderRadius:  BorderRadius.only(
-          bottomLeft: Radius.circular(25), topRight: Radius.circular(25))
-
-  );
+      borderRadius: BorderRadius.only(
+          bottomLeft: Radius.circular(25), topRight: Radius.circular(25)));
 }
+
 // * imagen del producto ------------------------------------------------
 class _BackgroundImage extends StatelessWidget {
-  const _BackgroundImage({
-    Key? key,
-  }) : super(key: key);
+  final String? url;
+
+  const _BackgroundImage(this.url);
 
   @override
   Widget build(BuildContext context) {
@@ -158,11 +180,16 @@ class _BackgroundImage extends StatelessWidget {
         width: double.infinity, // to fill the parent
         height: 420,
         color: Colors.red,
-        child: const FadeInImage(
-          placeholder: AssetImage('assets/jar-loading.gif'),
-          image: NetworkImage('https://via.placeholder.com/400x300/f6f6f6'),
-          fit: BoxFit.cover,
-        ),
+        child: url == null
+            ? const Image(
+                image: AssetImage('assets/no-image.png'),
+                fit: BoxFit.cover,
+              )
+            : FadeInImage(
+                placeholder: const AssetImage('assets/jar-loading.gif'),
+                image: NetworkImage(url ?? 'assets/no-image.png'),
+                fit: BoxFit.cover,
+              ),
       ),
     );
   }
