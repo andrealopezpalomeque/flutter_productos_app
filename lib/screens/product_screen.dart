@@ -72,6 +72,9 @@ class _ProductScreenBody extends StatelessWidget {
             if (!productForm.isValidForm()) return;
 
             await productsService.saveOrCreateProduct(productForm.product);
+
+            //!luego de guardar, regresar a la pantalla anterior
+            Navigator.of(context).pop();
           },
           child: const Icon(Icons.save_outlined),
         ));
