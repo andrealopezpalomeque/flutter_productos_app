@@ -14,7 +14,7 @@ class ProductImage extends StatelessWidget {
             width: double.infinity,
             height: 450,
             child: Opacity(
-              opacity: 0.8,
+              opacity: 0.9,
               child: ClipRRect(
                 // ClipRRect: Clip rounded corners
                 borderRadius: const BorderRadius.only(
