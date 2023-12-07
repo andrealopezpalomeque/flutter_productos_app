@@ -33,7 +33,6 @@ class Product {
         "price": price,
       };
 
-// method to convert a map into an object
   static Product fromMap(Map<String, dynamic> map) {
     return Product(
       // Assuming your Product class has properties like name, price, etc.
@@ -44,6 +43,7 @@ class Product {
     );
   }
 
+// copy() method to create a copy of the object
   Product copy() => Product(
         available: available,
         name: name,

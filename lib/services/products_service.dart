@@ -6,9 +6,9 @@ import 'package:http/http.dart' as http;
 class ProductsService extends ChangeNotifier {
   final String _baseUrl = 'flutter-varios-1702e-default-rtdb.firebaseio.com';
 
-  final List<Product> products = [];
+  final List<Product> products = []; // ? FINAL porque no se va a reasignar
 
-  late Product selectedProduct;
+  late Product selectedProduct; // ? LATE indica que se inicializara despues
 
   bool isLoading = true;
 
